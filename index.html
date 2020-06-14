@@ -89,17 +89,37 @@
       let timeLabel = ["8:00 AM","9:00 AM","10:00 AM", "11:00 AM", "12:00 PM", "1:00 PM", "2:00 PM", "3:00 PM", "4:00 PM", "5:00 PM", "6:00 PM", "7:00 PM", "8:00 PM", "9:00 PM", "10:00 PM", "11:00 PM", "12:00 AM"];
 
       $.each(timeLabel, function(i, val) {
-        let newTimeBlock = $('<div>').html('<div class="row"><div class="col-sm-12 input-group"><div class="input-group-prepend"><span class="input-group-text hourlabel" id="inputGroup-sizing-md">' + val + '</span></div><textarea class="form-control" aria-label="Task" aria-describedby="button-addon2 "></textarea><div class="input-group-append"><button class="btn btn-outline-secondary bg-info" type="button" id="button-addon2"><span class="fas fa-save"></span></button></div></div>');
+        let newTimeBlock = $('<div>').html('<div class="row hourBlock"><div class="col-sm-12 input-group"><div class="input-group-prepend"><span class="input-group-text hourlabel" id="inputGroup-sizing-md">' + val + '</span></div><textarea class="form-control" aria-label="Task" aria-describedby="button-addon2 "></textarea><div class="input-group-append"><button class="btn btn-outline-secondary bg-info" type="button" id="button-addon2"><span class="fas fa-save text-light"></span></button></div></div>');
         $('.container').append(newTimeBlock);
       });
       
-      // <!-- <span class="fas fa-edit"></span> -->
 
+      // Switches the icon on the hour block button if it has data in it...
+      // may use later, may not...
 
+      /* $(".hourBlock").change(function() {
+        if ($(this > "textarea").val !== "") {
+          console.log(": Has Value");
+          $(this).find(".fas").removeClass("fa-save")
+          $(this).find(".fas").addClass("fa-edit");
+        } else {
+          console.log(": Has NO Value");
+          $(this).find(".fas").removeClass("fa-edit")
+          $(this).find(".fas").addClass("fa-save");
+        }
+      }); */     
 
       // if the current time is past the time of the timeblock, set the timeblock to class "alert alert-secondary"
+
       // if the current time is before the time of the timeblock, set the timeblock to class "alert alert-success"
+
       // if the current time is within the hour of the timeblock, set the timeblock to class "alert alert-danger"
+
+      // on entry of the textarea, clicking save sets the value for the textarea and saves it to localStorage
+      
+      // clicking save commits whatever is in the textarea to local storage again / updates localstorage
+
+
 
     </script>
 
