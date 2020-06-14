@@ -69,3 +69,13 @@ textarea{
   font-size: 20px;
   transition: all .3s ease-in-out;
 }
+
+/* Additional Custom Classes */
+
+.hidden {
+  display: none;
+}
+
+.hourlabel {
+  min-width: 100px !important;
+}

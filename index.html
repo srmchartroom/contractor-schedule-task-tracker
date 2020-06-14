@@ -25,25 +25,84 @@
   </head>
 
   <body>
-    <header class="jumbotron">
+    <header class="jumbotron py-2 sticky-top bg-light">
       <h1 class="display-3"></h1>
-      <p class="lead"><span class="today"></span><br>
-        <span class="small">Work Day Scheduler | Daily Itinerary &amp; Task Planning</span></p>
+      <p id="descript" class="lead small">Work Day Scheduler | Daily Itinerary &amp; Task Planning</p>
       <p id="currentDay" class="lead"></p>
+      <div id="hCollapseBtnDiv" class="btn-group dropup">
+        <button id="hCollapseBtn" type="button" class="btn btn-secondary dropdown-toggle mb-0" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        </button></p>
     </header>
     <div class="container">
       <!-- Timeblocks go here -->
+      
     </div>
+    <footer>
+      <div>&nbsp;</div>
+    </footer>
 
     <script>
-      let shortNow = moment().format("ddd, MM/DD/YY").toUpperCase();
-      $(".display-3").text(shortNow);
-      let now = moment().format("dddd, MMMM Do YYYY, h:mm:ss a");
-      $(".today").text(now);
+
+      // HEADER CHANGES AND FUNCTIONS
+
+    
+      // ---- SHOW DATE IN VARIOUS FORMATS IN THE HEADER ---- //
+      // ---------------------------------------------------- //
+       // Leverages moment.js to grab today's date and format appropriately (e.g. Mon, 01/31/20) and set it to a var "shortNow"
+      let shortNow = moment().format('ddd, MM/DD/YY').toUpperCase();
+      // Sets the h1 w/ class "".display-3" with the date in the above variable
+      $('.display-3').text(shortNow);
+
+      // Leverages moment.js to grab today's date and format appropriately (e.g. Monday, January 31 2020, 2:32:53 pm) and set it to a var "now"
+      let now = moment().format('dddd, MMMM Do YYYY, h:mm:ss a');
+      // Sets the p w/ #id "currentDay" with the date held in the above variable
+      $('#currentDay').text(now);
+      // ---------------------------------------------------- //
+
+
+
+      // ---- CREATE A COLLAPSE HEADER BUTTON AND CLICK FUNCTION ---- //
+      // ------------------------------------------------------------ //
+      const collapse = 'Collapse '; // Set a variable for the button text when a dropup
+      const expand = 'Expand '; // Set a variable for the button text when a dropdown
+      $('#hCollapseBtn').text(collapse); // Set the initial button text for the dropup state on page load
+      
+      // Add an event listener and function to handle collapsing of a portion of the superfluous elements of the header on click
+      $('#hCollapseBtn').on('click', function() {
+        if ($('#hCollapseBtnDiv').hasClass('dropup')) { // if the div for the button has the .dropup class (indicating a collapsing action)...
+          $('#hCollapseBtnDiv').removeClass('dropup'); // ...remove the .dropup class
+          $('#hCollapseBtnDiv').addClass('dropdown'); // ...add the .dropdown class
+          $('#hCollapseBtn').text(expand); // ...change the button text to be "Expand"
+          $('h1').addClass('hidden'); // ...hide the h1
+          $('#descript').addClass('hidden'); // ...hide the app description
+        } else {
+          $('#hCollapseBtnDiv').removeClass('dropdown'); // ...remove the dropdown class
+          $('#hCollapseBtnDiv').addClass('dropup'); // ...add the drop-up class
+          $('#hCollapseBtn').text(collapse); // ...change the button text to be "Collapse"
+          $('.display-3').removeClass('hidden'); // ...show the h1
+          $('.lead').removeClass('hidden'); // ...show the app description
+        }
+      });
+      // ------------------------------------------------------------ //
+
+      // ---- CREATE THE TIMEBLOCKS ---- //
+      let timeLabel = ["8:00 AM","9:00 AM","10:00 AM", "11:00 AM", "12:00 PM", "1:00 PM", "2:00 PM", "3:00 PM", "4:00 PM", "5:00 PM", "6:00 PM", "7:00 PM", "8:00 PM", "9:00 PM", "10:00 PM", "11:00 PM", "12:00 AM"];
+
+      $.each(timeLabel, function(i, val) {
+        let newTimeBlock = $('<div>').html('<div class="row"><div class="col-sm-12 input-group"><div class="input-group-prepend"><span class="input-group-text hourlabel" id="inputGroup-sizing-md">' + val + '</span></div><textarea class="form-control" aria-label="Task" aria-describedby="button-addon2 "></textarea><div class="input-group-append"><button class="btn btn-outline-secondary bg-info" type="button" id="button-addon2"><span class="fas fa-save"></span></button></div></div>');
+        $('.container').append(newTimeBlock);
+      });
+      
+      // <!-- <span class="fas fa-edit"></span> -->
+
+
+
+      // if the current time is past the time of the timeblock, set the timeblock to class "alert alert-secondary"
+      // if the current time is before the time of the timeblock, set the timeblock to class "alert alert-success"
+      // if the current time is within the hour of the timeblock, set the timeblock to class "alert alert-danger"
 
     </script>
 
-    <!-- <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script> -->
-    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script> -->
+    
   </body>
 </html>
