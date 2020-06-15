@@ -53,11 +53,21 @@
       // Sets the h1 w/ class "".display-3" with the date in the above variable
       $('.display-3').text(shortNow);
 
-      // Leverages moment.js to grab today's date and format appropriately (e.g. Monday, January 31 2020, 2:32:53 pm) and set it to a var "now"
-      let now = moment().format('dddd, MMMM Do YYYY, h:mm:ss a');
-      // Sets the p w/ #id "currentDay" with the date held in the above variable
-      $('#currentDay').text(now);
+      
+      // Set a timer interval to infinitely loop and update the current seconds.
+      window.setInterval(function() {
+          // Leverages moment.js to grab today's date and format appropriately (e.g. Monday, January 31 2020, 2:32:53 pm) and set it to a var "now"
+          let now = moment().format('dddd, MMMM Do YYYY, h:mm:ss a');
+          // Sets the p w/ #id "currentDay" with the date held in the above variable
+          $('#currentDay').text(now);
+          // Loop every the interval every 1000 milliseconds (aka every second)
+        }, 1000);
+      
       // ---------------------------------------------------- //
+
+
+      
+        
 
 
 
