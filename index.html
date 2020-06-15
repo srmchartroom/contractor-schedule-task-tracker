@@ -96,14 +96,21 @@
       // ------------------------------------------------------------ //
 
       // ---- CREATE THE TIMEBLOCKS ---- //
-      let timeLabel = ["8:00 AM","9:00 AM","10:00 AM", "11:00 AM", "12:00 PM", "1:00 PM", "2:00 PM", "3:00 PM", "4:00 PM", "5:00 PM", "6:00 PM", "7:00 PM", "8:00 PM", "9:00 PM", "10:00 PM", "11:00 PM", "12:00 AM"];
-
-      $.each(timeLabel, function(i, val) {
-        let newTimeBlock = $('<div>').html('<div class="row hourBlock"><div class="col-sm-12 input-group"><div class="input-group-prepend"><span class="input-group-text hourlabel" id="inputGroup-sizing-md">' + val + '</span></div><textarea class="form-control" aria-label="Task" aria-describedby="button-addon2 "></textarea><div class="input-group-append"><button class="btn btn-outline-secondary bg-info" type="button" id="button-addon2"><span class="fas fa-save text-light"></span></button></div></div>');
-        $('.container').append(newTimeBlock);
+      let timeLabel = ["8:00 AM","9:00 AM","10:00 AM", "11:00 AM", "12:00 PM", "1:00 PM", "2:00 PM", "3:00 PM", "4:00 PM", "5:00 PM", "6:00 PM", "7:00 PM", "8:00 PM", "9:00 PM", "10:00 PM", "11:00 PM", "12:00 AM"]; // create an array of times for the time blocks
+      let shortID = ""; // create a variable to hold an ID for each timeblock
+      $.each(timeLabel, function(i, val) {  // loop through the timeLabel array, and for each index: value,...
+        
+        let newTimeBlock = $('<div>').html('<div class="row hourBlock"><div class="col-sm-12 input-group"><div class="input-group-prepend"><span class="input-group-text hourlabel" id="inputGroup-sizing-md">' + val + '</span></div><textarea class="form-control" aria-label="Task" aria-describedby="button-addon2 "></textarea><div class="input-group-append"><button class="btn btn-outline-secondary bg-info" type="button" id="button-addon2"><span class="fas fa-save text-light"></span></button></div></div>'); // create a variable with the row HTML
+        if (val.length == 8) { // if the value has an hour that is double-digit (10:00 - 12:00)...
+          shortID = val[0]+val[1]+val[val.length-2] // create a short string for the time block's div (e.g. 12A, 10P, etc.)  
+        } else {  // if the value has an hour that is single-digit (e.g. 1:00 - 9:00)... 
+          shortID = val[0]+val[val.length-2]  // create a short string for the time block's div (e.g. 1A, 9P, etc.)
+        };
+        newTimeBlock.attr("id", shortID); // add the string to the ID attribute of the new time block
+        $('.container').append(newTimeBlock);  // append the timeblock to the container section for the timeblock
       });
-      
 
+      
       // Switches the icon on the hour block button if it has data in it...
       // may use later, may not...
 
