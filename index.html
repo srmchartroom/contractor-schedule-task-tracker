@@ -109,11 +109,11 @@
         {hour : "12:00 AM" , hVal : 24 , taVal : ""} ,          
       ]; // Create an array of times for the time blocks...
 
-      if (JSON.parse(localStorage.getItem("CurrentToDos")) == null ) {
-        console.log("Nothing in local storage. Time table is created from scratch.");
-      } else {
-        console.log("Time table is populated from existing localStorage.")
-        timeLabel = JSON.parse(localStorage.getItem("CurrentToDos"));
+      if (JSON.parse(localStorage.getItem("CurrentToDos")) == null ) { // If there IS NOT a local storage object called "CurrentToDos"...
+        console.log("Nothing in local storage. Time table is created from scratch."); // ...Console log and do nothing else.
+      } else { // If there IS an existing local storage object called "CurrentToDos"....
+        console.log("Time table is populated from existing localStorage.") // Console log an affirmative message for developer error handling...
+        timeLabel = JSON.parse(localStorage.getItem("CurrentToDos")); // Overwrite the default timeLabel array with the parsed "CurrentToDos" local storage object
       }
 
       let shortID = ""; // Create a variable to hold an ID for each timeblock to use for display manipulation...
@@ -151,27 +151,17 @@
       // ----------------------------- //
 
       // --- UPDATE TEXTAREA BASED ON LOCALSTORAGE; SET LOCALSTORAGE ON CHANGE/SAVE --- //
-      let currentTAclass = "";
-      let currentTAclassKey = "";
-
-      $("button").click(function() {
-        $(this).attr("class");
-        console.log($(this).attr("class")); 
-        let currBtnClass = $(this).attr("class");
-        let btnCV = currBtnClass[0] + currBtnClass[1];
-        console.log("btnCV is: " + btnCV);
-        thisTA = $("textarea." + btnCV).val()
-        console.log(thisTA);
-        $.each(timeLabel, function(i, val) {
-          if (val.hVal == btnCV) {
-            val.taVal = thisTA; 
-            console.log(val.taVal);
-            console.log("hVal: " + val.hVal + ", taVal: " + val.taVal )
+      $("button").click(function() { // Listen for a click on a timeblock button
+        let currBtnClass = $(this).attr("class"); // Set a variable to be the classes on the button that's been clicked
+        let btnCV = currBtnClass[0] + currBtnClass[1]; // Set a variable equal to the first class which correlates with the buttons hour value
+        thisTA = $("textarea." + btnCV).val(); // Set a variable for the matching textarea that has the same first class hour value to the value in the textarea field 
+        $.each(timeLabel, function(i, val) { // loop through the items in the timeLabel array...
+          if (val.hVal == btnCV) { // ...if the array item's hVal is equal to the btn's hour value...
+            val.taVal = thisTA; // ...then set the corresponding textarea value ("taVal") to thisTA var holding the textarea's value
           } 
-        }); 
-        localStorage.setItem("CurrentToDos", JSON.stringify(timeLabel));
-      });// set the timeLabel array to local storage
-
+        }); // once the textarea value is updated in the timeLabel array...
+        localStorage.setItem("CurrentToDos", JSON.stringify(timeLabel)); // stringify the timeLabel array and store it in local storage under "CurrentToDos"
+      });
       // ----------------------------- //
 
     </script>
