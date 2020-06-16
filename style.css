@@ -72,10 +72,12 @@ textarea{
 
 /* Additional Custom Classes */
 
+/* Class to handle hiding header elements when toggle to collapse */
 .hidden {
   display: none;
 }
 
+/* Class to adjust width of the hour labels to the left of the entry fields */
 .hourlabel {
   min-width: 100px !important;
 }
