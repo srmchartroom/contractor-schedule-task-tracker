@@ -48,11 +48,16 @@
     
       // ---- SHOW DATE IN VARIOUS FORMATS IN THE HEADER ---- //
       // ---------------------------------------------------- //
-       // Leverages moment.js to grab today's date and format appropriately (e.g. Mon, 01/31/20) and set it to a var "shortNow"
+      
+      // Leverages moment.js to grab today's date and format appropriately (e.g. Mon, 01/31/20) and set it to a var "shortNow"
       let shortNow = moment().format('ddd, MM/DD/YY').toUpperCase();
       // Sets the h1 w/ class "".display-3" with the date in the above variable
       $('.display-3').text(shortNow);
-
+      
+      // Creates a variable to be set as the current hour in shorthand (e.g. 8AM, 4AM, 12PM, etc.)
+      let currentHour = moment().format('hA'); 
+      // Creates a variable to be set as the hour value in 24hr format for use in functional comparisons (e.g. 4, 17, 23 etc.)
+      let currentHourVal = moment().format('H');
       
       // Set a timer interval to infinitely loop and update the current seconds.
       window.setInterval(function() {
@@ -60,16 +65,13 @@
           let now = moment().format('dddd, MMMM Do YYYY, h:mm:ss a');
           // Sets the p w/ #id "currentDay" with the date held in the above variable
           $('#currentDay').text(now);
+          // Run the timeblock styling function (repeatedly) so that it updates the by-hour styles as soon as the hour changes
+          styleTime(); 
           // Loop every the interval every 1000 milliseconds (aka every second)
-        }, 1000);
+        }, 1000); 
       
       // ---------------------------------------------------- //
-
-
-      
-        
-
-
+         
 
       // ---- CREATE A COLLAPSE HEADER BUTTON AND CLICK FUNCTION ---- //
       // ------------------------------------------------------------ //
@@ -95,23 +97,78 @@
       });
       // ------------------------------------------------------------ //
 
-      // ---- CREATE THE TIMEBLOCKS ---- //
-      let timeLabel = ["8:00 AM","9:00 AM","10:00 AM", "11:00 AM", "12:00 PM", "1:00 PM", "2:00 PM", "3:00 PM", "4:00 PM", "5:00 PM", "6:00 PM", "7:00 PM", "8:00 PM", "9:00 PM", "10:00 PM", "11:00 PM", "12:00 AM"]; // create an array of times for the time blocks
-      let shortID = ""; // create a variable to hold an ID for each timeblock
-      $.each(timeLabel, function(i, val) {  // loop through the timeLabel array, and for each index: value,...
-        
-        let newTimeBlock = $('<div>').html('<div class="row hourBlock"><div class="col-sm-12 input-group"><div class="input-group-prepend"><span class="input-group-text hourlabel" id="inputGroup-sizing-md">' + val + '</span></div><textarea class="form-control" aria-label="Task" aria-describedby="button-addon2 "></textarea><div class="input-group-append"><button class="btn btn-outline-secondary bg-info" type="button" id="button-addon2"><span class="fas fa-save text-light"></span></button></div></div>'); // create a variable with the row HTML
-        if (val.length == 8) { // if the value has an hour that is double-digit (10:00 - 12:00)...
-          shortID = val[0]+val[1]+val[val.length-2] // create a short string for the time block's div (e.g. 12A, 10P, etc.)  
-        } else {  // if the value has an hour that is single-digit (e.g. 1:00 - 9:00)... 
-          shortID = val[0]+val[val.length-2]  // create a short string for the time block's div (e.g. 1A, 9P, etc.)
-        };
-        newTimeBlock.attr("id", shortID); // add the string to the ID attribute of the new time block
-        $('.container').append(newTimeBlock);  // append the timeblock to the container section for the timeblock
-      });
+      // ---- CREATE THE TIMEBLOCKS --------------------------------- //
+      // -------------------------------------------------------------//
+      const timeLabel = [
+        // {hour : "1:00 AM" , hVal : 1} ,
+        // {hour : "2:00 AM" , hVal : 2} ,
+        // {hour : "3:00 AM" , hVal : 3} ,
+        // {hour : "4:00 AM" , hVal : 4} ,
+        // {hour : "5:00 AM" , hVal : 5} ,
+        // {hour : "6:00 AM" , hVal : 6} ,
+        // {hour : "7:00 AM" , hVal : 7} ,
+        {hour : "8:00 AM" , hVal : 8} , 
+        {hour : "9:00 AM" , hVal : 9} ,
+        {hour : "10:00 AM" , hVal : 10} , 
+        {hour : "11:00 AM" , hVal : 11} , 
+        {hour : "12:00 PM" , hVal : 12} ,
+        {hour : "1:00 PM" , hVal : 13} ,
+        {hour : "2:00 PM" , hVal : 14} , 
+        {hour : "3:00 PM" , hVal : 15} , 
+        {hour : "4:00 PM" , hVal : 16} , 
+        {hour : "5:00 PM" , hVal : 17} , 
+        {hour : "6:00 PM" , hVal : 18} , 
+        {hour : "7:00 PM" , hVal : 19} , 
+        {hour : "8:00 PM" , hVal : 20} , 
+        {hour : "9:00 PM" , hVal : 21} , 
+        {hour : "10:00 PM" , hVal : 22} , 
+        {hour : "11:00 PM" , hVal : 23} , 
+        {hour : "12:00 AM" , hVal : 24} 
+    ]; // Create an array of times for the time blocks...
+      
+    let shortID = ""; // Create a variable to hold an ID for each timeblock to use for display manipulation...
+    let dataVal = "";
+    
+    $.each(timeLabel, function(i, val) {  // Loop through the timeLabel array, and for each index: value,...
+      let newTimeBlock = $('<div>').html('<div class="row hourBlock"><div class="col-sm-12 input-group"><div class="input-group-prepend"><span class="input-group-text hourlabel" id="inputGroup-sizing-md">' + val.hour + '</span></div><textarea class="form-control" aria-label="Task" aria-describedby="button-addon2 "></textarea><div class="input-group-append"><button class="btn btn-outline-secondary bg-info" type="button" id="button-addon2"><span class="fas fa-save text-light"></span></button></div></div>'); // ...create a var with the row HTML
+      if (val.hour.length == 8) { // ...if the value has an hour that is double-digit (10:00 - 12:00),... 
+        shortID = val.hour[0]+val.hour[1]+val.hour[val.hour.length-2]+val.hour[val.hour.length-1]; //...create a short string for the time block's div (e.g. 12AM, 10PM, etc.).
+      } else { // ...if the value has an hour that is single-digit (e.g. 1:00 - 9:00),... 
+        shortID = val.hour[0]+val.hour[val.hour.length-2]+val.hour[val.hour.length-1]; 
+      };  // ...create a short string for the time block's div (e.g. 1A, 9P, etc.).
+      dataVal = val.hVal;  // set the var dataVal to the the hVal (the 24h time value) of the hour in timeLabel array
+      newTimeBlock.attr("class", dataVal); // ...add a class (datalVal) to the new time block equivalent to the time in 24h format
+      newTimeBlock.attr("id", shortID); // ...add the string ("shortID") to the ID attribute of the new time block...
+      $('.container').append(newTimeBlock);  // ...and display the timeblock by appending it to the container section.   
+    });
+
 
       
-      // Switches the icon on the hour block button if it has data in it...
+      // --- STYLE THE TIMEBLOCKS BASED ON CURRENT HOUR ---------------------------------------------------//
+      // --------------------------------------------------------------------------------------------------//
+      
+      function styleTime () { // Create a function to style the timeblocks.
+        $.each(timeLabel, function(i, val) {  // Loop through each item in the timeLabel array...
+          if ( val.hVal < currentHourVal) { //...If the current time is past the time of the timeblock...
+            $("div."+ val.hVal + " textarea").addClass("alert alert-secondary"); // ...Add to the timeblock's classes: "alert alert-secondary"
+          } else if ( val.hVal == currentHourVal ) { // ...If the current time is = to or within the hour of the timeblock...
+            $("div."+ val.hVal + " textarea").addClass("alert alert-danger"); // ...Add to the timeblock's classes: "alert alert-danger"
+          } else if ( val.hVal > currentHourVal ) { // ...If the current time is before the time of the timeblock,... 
+            $("div."+ val.hVal + " textarea").addClass("alert alert-success"); //...Add to the timeblock's classes: "alert alert-success"
+          } else {
+            console.log("the current hour is not <, >, or = to an available timeblock's hVal"); // Edgecase to catch errors.
+          };
+        });
+      }
+       
+      // ----------------------------------------------------------------------------------------------//
+      
+
+      // on entry of the textarea, clicking save sets the value for the textarea and saves it to localStorage
+      
+      // clicking save commits whatever is in the textarea to local storage again / updates localstorage
+
+          // Switches the icon on the hour block button if it has data in it...
       // may use later, may not...
 
       /* $(".hourBlock").change(function() {
@@ -125,17 +182,6 @@
           $(this).find(".fas").addClass("fa-save");
         }
       }); */     
-
-      // if the current time is past the time of the timeblock, set the timeblock to class "alert alert-secondary"
-
-      // if the current time is before the time of the timeblock, set the timeblock to class "alert alert-success"
-
-      // if the current time is within the hour of the timeblock, set the timeblock to class "alert alert-danger"
-
-      // on entry of the textarea, clicking save sets the value for the textarea and saves it to localStorage
-      
-      // clicking save commits whatever is in the textarea to local storage again / updates localstorage
-
 
 
     </script>
