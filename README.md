@@ -11,7 +11,7 @@ The primary functionality includes:
 - **Persistent memory to hold values at the user- and browser-level for session independent retrieval:** Each timeblock is an input field that allows free and expandable space to write notes, meeting details, task information, or any other general information.  A click on the adjacent save icon will commit the existing entry of the text field to localStorage in the browser and remove any issues for recalling those values should the user inadvertently close the browser or computer, or have a need to recall previous hour notes after a new browser session is started.  Those localStorage memory values persist until manually cleared by the user either by removing the text data in the field and saving it, or by clearing their browser's localStorage memory key/values.  Otherwise, the user can conveniently keep track with the knowledge that their entries will be present when they hit the page again.
 
 ## Reviewing the Deployed application
-You can review the deployed application at (LINK HERE)[link here].
+You can review the deployed application at [https://srmchartroom.github.io/contractor-schedule-task-tracker/](https://srmchartroom.github.io/contractor-schedule-task-tracker/).
 
 ## Potential Future Updates
 In the process of building the application, obvious use cases came up. From the stance of utility as a contractor, some planned future enhancements include:
